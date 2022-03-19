@@ -70,8 +70,8 @@ while not done:
     for index,segment in enumerate(seglist):
         if index % mod == 0:
             i += 1
-        modi = mod*i+1
-        COLOR = ((1-index/modi) * np.array(Colors[i-1]) + index/modi * np.array(Colors[i]))
+        modi = index % mod
+        COLOR = ((1-modi/mod) * np.array(Colors[i-1]) + modi/mod * np.array(Colors[i]))
         COLOR = tuple(COLOR)
         segment.draw_segment(screen,COLOR)
         
