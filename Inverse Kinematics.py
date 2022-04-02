@@ -38,12 +38,8 @@ class Segment:
             np.array([np.cos(self.angle), np.sin(self.angle)])+self.bpos
         return newa
 
-    def seta(self, a):
-        self.a = a
-        self.b = -1*self.get_a()
-
-    def draw_segment(self, surface, COLOR):
-        pg.draw.line(surface, COLOR, self.apos, self.bpos, width=3)
+    def draw_segment(self, surface, COLOR, WIDTH):
+        pg.draw.line(surface, COLOR, self.apos, self.bpos, width=WIDTH)
 
     def update(self, bposi):
         self.bpos = bposi
@@ -73,7 +69,7 @@ base = np.array((WIDTH/2, HEIGHT - 1))
 done = False
 clock = pg.time.Clock()
 
-seglist = list_seg(70)
+seglist = list_seg(1000)
 
 # While loop for quiting screen
 while not done:
@@ -89,13 +85,14 @@ while not done:
     for index, segment in enumerate(seglist):
         # Cycle through the colors with a "continuous" line between consecutive
         # colors
+        WIDTH = (1 - index/num) * 2 + index/num * 5
         if index % mod == 0:
             i += 1
         modi = index % mod
         COLOR = ((1-modi/mod) * np.array(Colors[i-1]) + modi/mod *
                  np.array(Colors[i]))
         COLOR = tuple(COLOR)
-        segment.draw_segment(screen, COLOR)
+        segment.draw_segment(screen, COLOR, i+4)
 
     # Update the screen
     pg.display.flip()
