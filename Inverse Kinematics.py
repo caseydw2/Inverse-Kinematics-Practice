@@ -21,53 +21,60 @@ Colors = [RED,ORANGE,YELLOW,GREEN,BLUE,INDIGO,VIOLET]
 
 class Segment:
     def __init__(self,a, b, length, angle):
+        #Segement starting position
         self.apos = a
+        #Segment ending position
         self.bpos = b
         self.length = length
+        #Angle from the Horizontal
         self.angle = angle
         
     def get_a(self):
+        #Find a through polar coordinates
         delta = -1 * self.bpos + self.apos
         self.angle = np.arctan2(delta[1],delta[0])
-        newa = np.array([self.length*np.cos(self.angle),self.length*np.sin(self.angle)])+self.bpos
+        newa = self.length* np.array([np.cos(self.angle),np.sin(self.angle)])+self.bpos
         return newa
     
     def draw_segment(self,surface,COLOR):
         pg.draw.line(surface,COLOR,self.apos,self.bpos,width = 3)
     
-    def len_check(self):
-        diff = self.bpos - self.apos
-        if diff[0] **2 + diff[1]**2 > self.length ** 2:
-            pass
-
     def update(self,bposi):
         self.bpos = bposi
         self.apos = self.get_a()
         
 def list_seg(num):
-        seglist = [Segment(np.array([250,250-(400/num)]),np.array([250,250]),(400/num),0)]
+        #Create a list of segments where the (i+1)th segments b position is the ith a position.
+        seglist = [Segment(np.array([350,350-(600/num)]),np.array([350,350]),(600/num),0)]
         for i in range(num-1):
-            seglist.append(Segment(np.array([250,250+(400/((i+1)*num))]),seglist[i].apos,(400/num),0))
+            seglist.append(Segment(np.array([350,350+(600/((i+1)*num))]),seglist[i].apos,(600/num),0))
         return seglist
 
-size = (500,500)   
+#Initialize window size
+WIDTH = 700
+HEIGHT = 700
+size = (WIDTH,HEIGHT)
+
+#Create screen for screen
 screen = pg.display.set_mode(size)
 done = False
 clock = pg.time.Clock()
 
-seglist = list_seg(60)
+seglist = list_seg(70)
 
-
+#While loop for quit 
 while not done:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             done = True
-    
     screen.fill(WHITE)
+    
     i = 0
     num = len(seglist)
     mod = int(num / 5)
+    
     for index,segment in enumerate(seglist):
+        #Cycle through the colors with a "continuous" line between consecutive colors.
         if index % mod == 0:
             i += 1
         modi = index % mod
@@ -75,9 +82,10 @@ while not done:
         COLOR = tuple(COLOR)
         segment.draw_segment(screen,COLOR)
         
-        
+    #Update the screen    
     pg.display.flip()
     
+    #Have the first segment follow the mouse.
     seglist[0].bpos = np.array(pg.mouse.get_pos())
     seglist[0].apos = seglist[0].get_a()
     
@@ -88,6 +96,7 @@ while not done:
             segment.update(seglist[index-1].apos)
     
     
+
     
     clock.tick(60)
 
