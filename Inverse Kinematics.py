@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-.
 """
 Created on Mon Mar 14 16:45:35 2022
 
@@ -38,6 +38,10 @@ class Segment:
             np.array([np.cos(self.angle), np.sin(self.angle)])+self.bpos
         return newa
 
+    def seta(self, a):
+        self.a = a
+        self.b = -1*self.get_a()
+
     def draw_segment(self, surface, COLOR):
         pg.draw.line(surface, COLOR, self.apos, self.bpos, width=3)
 
@@ -53,7 +57,7 @@ def list_seg(num):
                        np.array([350, 350]), (600/num), 0)]
     for i in range(num-1):
         seglist.append(
-            Segment(np.array([350, 350+(600/((i+1)*num))]), seglist[i].apos, 
+            Segment(np.array([350, 350+(600/((i+1)*num))]), seglist[i].apos,
                     (600/num), 0))
     return seglist
 
@@ -65,12 +69,13 @@ size = (WIDTH, HEIGHT)
 
 # Create screen for screen
 screen = pg.display.set_mode(size)
+base = np.array((WIDTH/2, HEIGHT - 1))
 done = False
 clock = pg.time.Clock()
 
 seglist = list_seg(70)
 
-# While loop for quit
+# While loop for quiting screen
 while not done:
     for event in pg.event.get():
         if event.type == pg.QUIT:
@@ -87,8 +92,8 @@ while not done:
         if index % mod == 0:
             i += 1
         modi = index % mod
-        COLOR = ((1-modi/mod) *
-                 np.array(Colors[i-1]) + modi/mod * np.array(Colors[i]))
+        COLOR = ((1-modi/mod) * np.array(Colors[i-1]) + modi/mod *
+                 np.array(Colors[i]))
         COLOR = tuple(COLOR)
         segment.draw_segment(screen, COLOR)
 
@@ -99,11 +104,20 @@ while not done:
     seglist[0].bpos = np.array(pg.mouse.get_pos())
     seglist[0].apos = seglist[0].get_a()
 
-    for index, segment in enumerate(seglist):
-        if index == 0:
-            pass
-        else:
-            segment.update(seglist[index-1].apos)
+    # Set every segments b position to the a position of the segment infront
+    # it.
+    for index, segment in enumerate(seglist[1:]):
+        segment.update(seglist[index].apos)
+
+    # Make the bottom segment fixed to the middle bottom of the screen
+    seglistbkwrd = seglist[::-1]
+    seglistbkwrd[0].bpos = base
+    seglistbkwrd[0].apos = seglistbkwrd[0].get_a()
+
+    # Adjust the segments going from the bottom segment.
+    for index, segment in enumerate(seglistbkwrd[1:]):
+        segment.bpos = seglistbkwrd[index].apos
+        segment.apos = segment.get_a()
 
     clock.tick(60)
 
