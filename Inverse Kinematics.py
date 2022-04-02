@@ -47,12 +47,14 @@ class Segment:
 
 
 def list_seg(num):
-    # Create a list of segments where the (i+1)th segments b position is the ith a position.
+    # Create a list of segments where the (i+1)th segments b position is the
+    # ith a position.
     seglist = [Segment(np.array([350, 350-(600/num)]),
                        np.array([350, 350]), (600/num), 0)]
     for i in range(num-1):
         seglist.append(
-            Segment(np.array([350, 350+(600/((i+1)*num))]), seglist[i].apos, (600/num), 0))
+            Segment(np.array([350, 350+(600/((i+1)*num))]), seglist[i].apos, 
+                    (600/num), 0))
     return seglist
 
 
