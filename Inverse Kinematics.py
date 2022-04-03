@@ -92,7 +92,7 @@ while not done:
         COLOR = ((1-modi/mod) * np.array(Colors[i-1]) + modi/mod *
                  np.array(Colors[i]))
         COLOR = tuple(COLOR)
-        segment.draw_segment(screen, COLOR, i+4)
+        segment.draw_segment(screen, COLOR, 2*i+4)
 
     # Update the screen
     pg.display.flip()
