@@ -142,12 +142,6 @@ if __name__ == "__main__":
     for base in bases:
         tent_list.append(Tentacle(base,Length))
 
-    
-
-
-
-    # seglist = list_seg(1000)
-
  # While loop for quiting screen
     while not done:
         for event in pg.event.get():
@@ -160,15 +154,10 @@ if __name__ == "__main__":
             tentacle.color_tentacle_rainbow()
             tentacle.update_forward()
             tentacle.update_backward()
-    #     color_tentacle(seglist)
 
-    #     # Update the screen
+
+      # Update the screen
         pg.display.flip()
-
-    
-    #     update_tentacle_forward(seglist)
-    #     update_tentacle_backward(seglist,base)
-
-    #     clock.tick(60)
+        clock.tick(60)
 
     pg.quit()
