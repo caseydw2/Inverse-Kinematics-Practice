@@ -8,9 +8,13 @@ import numpy as np
 import pygame as pg
 from math import pi
 
-Tentacle_Number = 3
+Tentacle_Number = 2
 
 Radius = 300
+
+Segment_Number = 750
+
+Length = 1000
 
 RED = (225, 0, 0)
 ORANGE = (255, 127, 0)
@@ -63,23 +67,24 @@ class Segment:
         self.bpos = bposi
         self.apos = self.get_a()
 
-def list_seg(num):
+def list_seg(num,length = 600):
+    
     # Create a list of segments where the (i+1)th segments b position is the
     # ith a position.
-    seglist = [Segment(np.array([350, 350-(600/num)]),
-                       np.array([350, 350]), (600/num), 0)]
+    seglist = [Segment(np.array([350, 350-(length/num)]),
+                       np.array([350, 350]), (length/num), 0)]
     for i in range(num-1):
         seglist.append(
-            Segment(np.array([350, 350+(600/((i+1)*num))]), seglist[i].apos,
-                    (600/num), 0))
+            Segment(np.array([350, 350+(length/((i+1)*num))]), seglist[i].apos,
+                    (length/num), 0))
     return seglist
 
 
 
 class Tentacle:
-    def __init__(self,base) -> None:
+    def __init__(self,base,lenght) -> None:
         self.base = base
-        self.segments = list_seg(500)
+        self.segments = list_seg(Segment_Number,lenght)
     
     def update_forward(self):
         seglist = self.segments
@@ -135,7 +140,7 @@ if __name__ == "__main__":
     tent_list = []
     bases = find_bases(Tentacle_Number,Radius)
     for base in bases:
-        tent_list.append(Tentacle(base))
+        tent_list.append(Tentacle(base,Length))
 
     
 
