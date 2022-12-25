@@ -8,6 +8,9 @@ import numpy as np
 import pygame as pg
 from math import pi
 
+Tentacle_Number = 3
+
+Radius = 300
 
 RED = (225, 0, 0)
 ORANGE = (255, 127, 0)
@@ -119,46 +122,6 @@ class Tentacle:
             COLOR = tuple(COLOR)
             segment.draw_segment(screen, COLOR, 2*i+4)
 
-
-def color_tentacle(seglist):
-    i = 0
-    num = len(seglist)
-    mod = int(num / 5)
-
-    for index, segment in enumerate(seglist):
-        # Cycle through the colors with a "continuous" line between consecutive
-        # colors
-        WIDTH = (1 - index/num) * 2 + index/num * 5
-        if index % mod == 0:
-            i += 1
-        modi = index % mod
-        COLOR = ((1-modi/mod) * np.array(Colors[i-1]) + modi/mod *
-                 np.array(Colors[i]))
-        COLOR = tuple(COLOR)
-        segment.draw_segment(screen, COLOR, 2*i+4)
-
-def update_tentacle_forward(seglist):
-    # Have the first segment follow the mouse.
-    seglist[0].bpos = np.array(pg.mouse.get_pos())
-    seglist[0].apos = seglist[0].get_a()
-
-    # Set every segments b position to the a position of the segment infront
-    # it.
-    for index, segment in enumerate(seglist[1:]):
-        segment.update(seglist[index].apos)
-
-def update_tentacle_backward(seglist,base):
-    # Make the bottom segment fixed to the base.
-    seglistbkwrd = seglist[::-1]
-    seglistbkwrd[0].bpos = base
-    seglistbkwrd[0].apos = seglistbkwrd[0].get_a()
-
-    # Adjust the segments going from the bottom segment.
-    for index, segment in enumerate(seglistbkwrd[1:]):
-        segment.bpos = seglistbkwrd[index].apos
-        segment.apos = segment.get_a()
-
-
 def find_bases(num,r=75):
     bases = []
     angles = np.arange(0,num) * 2*pi/num
@@ -170,7 +133,7 @@ def find_bases(num,r=75):
 
 if __name__ == "__main__":
     tent_list = []
-    bases = find_bases(5)
+    bases = find_bases(Tentacle_Number,Radius)
     for base in bases:
         tent_list.append(Tentacle(base))
 
