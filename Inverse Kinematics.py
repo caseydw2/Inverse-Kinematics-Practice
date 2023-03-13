@@ -8,13 +8,13 @@ import numpy as np
 import pygame as pg
 from math import pi
 
-Tentacle_Number = 2
+Tentacle_Number = 10
 
 Radius = 300
 
-Segment_Number = 750
+Segment_Number = 10
 
-Length = 1000
+Length = 250
 
 RED = (225, 0, 0)
 ORANGE = (255, 127, 0)
